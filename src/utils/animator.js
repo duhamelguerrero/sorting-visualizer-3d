@@ -1,7 +1,5 @@
 export class Animator {
   constructor(frames) {
-    console.log(frames.length);
-
     this.frames = frames;
     this.playing = false;
   }

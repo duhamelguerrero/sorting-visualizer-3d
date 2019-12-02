@@ -12,7 +12,7 @@ export const quickSort = (
   const array = _.cloneDeep(originalArray);
   const animation = [];
 
-  function swap(leftIndex, rightIndex) {
+  const swap = (leftIndex, rightIndex) => {
     var temp = array[leftIndex];
     array[leftIndex] = array[rightIndex];
     array[rightIndex] = temp;
@@ -32,8 +32,8 @@ export const quickSort = (
       },
       time: 100
     });
-  }
-  function partition(left, right) {
+  };
+  const partition = (left, right) => {
     var pivot = array[Math.floor((right + left) / 2)], //middle element
       i = left, //left pointer
       j = right; //right pointer
@@ -42,8 +42,7 @@ export const quickSort = (
       animations: () => {
         dispatch(
           editCube(pivot.id, {
-            color: "red",
-            position: { ...pivot.position, x: 4 }
+            color: "red"
           })
         );
       },
@@ -64,9 +63,9 @@ export const quickSort = (
       }
     }
     return i;
-  }
+  };
 
-  function recursiveSort(left, right) {
+  const recursiveSort = (left, right) => {
     if (array.length > 1) {
       const index = partition(left, right); //index returned from partition
 
@@ -80,9 +79,54 @@ export const quickSort = (
       }
     }
     return array;
-  }
+  };
 
   // Sort the entire array.
   recursiveSort(0, array.length - 1);
+  return [array, animation];
+};
+
+export const bubbleSort = (
+  originalArray,
+  dispatch,
+  comparator = defaultComparator
+) => {
+  // immutable version
+  const array = _.cloneDeep(originalArray);
+  const n = array.length;
+  const animation = [];
+
+  const swap = (leftIndex, rightIndex) => {
+    var temp = array[leftIndex];
+    array[leftIndex] = array[rightIndex];
+    array[rightIndex] = temp;
+
+    const newCubes = array.reduce((obj, el, index) => {
+      obj[el.id] = {
+        ...el,
+        order: index
+      };
+
+      return obj;
+    }, {});
+
+    animation.push({
+      animations: () => {
+        dispatch(setCubes({ ...newCubes }));
+      },
+      time: 100
+    });
+  };
+
+  // A function to implement bubble sort
+  const bubbleSort = () => {
+    for (let i = 0; i < n - 1; i++) {
+      for (let j = 0; j < n - i - 1; j++) {
+        if (comparator(array[j], array[j + 1]) === 1) swap(j, j + 1);
+      }
+    }
+  };
+
+  bubbleSort();
   return [array, animation];
 };

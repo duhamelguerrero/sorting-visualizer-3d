@@ -2,14 +2,14 @@ import React, { useEffect, useCallback } from "react";
 import Header from "./components/Header";
 import Scene from "./components/Scene";
 
-import { useDispatch } from "react-redux";
-import { generateCubes, sortCubes } from "./actions/cubes.actions";
+import { useDispatch, useSelector } from "react-redux";
+import { generateCubes } from "./actions/cubes.actions";
 
 function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(generateCubes(30));
+    dispatch(generateCubes());
   }, []);
 
   return (

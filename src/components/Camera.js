@@ -16,7 +16,7 @@ const Camera = props => {
     //ref.current.scale.x = 0.002 * amount;
     //ref.current.scale.y = 0.002 * amount;
 
-    ref.current.position.set(50, 50, 50); // all components equal
+    ref.current.position.set(20, 20, 20); // all components equal
     ref.current.lookAt(scene.position); // or the origin
   }, []);
 

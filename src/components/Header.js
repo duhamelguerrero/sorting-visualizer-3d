@@ -1,6 +1,11 @@
 import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setAmountCubes, sortCubes } from "../actions/cubes.actions";
+import {
+  setAmountCubes,
+  sortCubes,
+  generateCubes
+} from "../actions/cubes.actions";
+import { resetAnimator } from "../actions/sort.actions";
 
 import HeaderAlgorithmSelector from "./HeaderAlgorithmSelector";
 
@@ -45,7 +50,7 @@ const useStyles = makeStyles(theme => ({
   inputInput: {
     padding: theme.spacing(1, 1, 1, 1),
     transition: theme.transitions.create("width"),
-    width: "100%"
+    width: 150
   },
   selectInput: {
     padding: theme.spacing(1, 1, 1, 1),
@@ -60,22 +65,42 @@ const useStyles = makeStyles(theme => ({
 const Header = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const amount = useSelector(state => state.cubes.amount);
+  const amount = useSelector(state => ({
+    amountX: state.cubes.amountX,
+    amountY: state.cubes.amountY
+  }));
+  const animator = useSelector(state => state.sort.animator);
 
   const onSortCubes = useCallback(() => {
     dispatch(sortCubes());
   }, []);
 
-  const onChangeAmount = useCallback(e => {
-    let value = parseInt(e.target.value);
+  const onChangeAmount = useCallback(
+    e => {
+      let value = parseInt(e.target.value);
 
-    if (value < 1 || !value) {
-      value = 1;
-    } else if (value > 100) {
-      value = 100;
-    }
+      if (value < 1 || !value) {
+        value = 1;
+      } else if (value > 100) {
+        value = 100;
+      }
 
-    dispatch(setAmountCubes(value));
+      dispatch(
+        setAmountCubes({
+          ...amount,
+          [e.target.name]: value
+        })
+      );
+    },
+    [amount]
+  );
+
+  const onReset = useCallback(() => {
+    dispatch(generateCubes());
+  }, []);
+
+  const onStop = useCallback(() => {
+    dispatch(resetAnimator());
   }, []);
 
   return (
@@ -92,7 +117,8 @@ const Header = () => {
             <InputBase
               placeholder="20"
               type="number"
-              value={amount}
+              name="amountX"
+              value={amount.amountX}
               onChange={onChangeAmount}
               classes={{
                 root: classes.inputRoot,
@@ -100,13 +126,36 @@ const Header = () => {
               }}
             />
           </div>
-          <Button
-            color="inherit"
-            onClick={onSortCubes}
-            className={classes.button}
-          >
-            Sort
+          <div className={classes.inputContainer}>
+            <InputBase
+              placeholder="20"
+              type="number"
+              name="amountY"
+              value={amount.amountY}
+              onChange={onChangeAmount}
+              classes={{
+                root: classes.inputRoot,
+                input: classes.inputInput
+              }}
+            />
+          </div>
+          <Button color="inherit" onClick={onReset} style={{ marginLeft: 10 }}>
+            Reset
           </Button>
+          {animator && animator.playing && (
+            <Button color="inherit" onClick={onStop} className={classes.button}>
+              Stop
+            </Button>
+          )}
+          {(!animator || !animator.playing) && (
+            <Button
+              color="inherit"
+              onClick={onSortCubes}
+              className={classes.button}
+            >
+              Sort
+            </Button>
+          )}
         </Toolbar>
       </AppBar>
     </div>

@@ -15,7 +15,16 @@ const Scene = ({ amount, cubes, initialCubes }) => {
         return (
           <Canvas style={{ width: "100vw", height: "calc(100vh - 64px)" }}>
             <Provider store={store}>
-              <Camera />
+              <ambientLight intensity={0.5} />
+              <Camera>
+                <spotLight
+                  intensity={0.5}
+                  position={[0, 0, 0]}
+                  angle={0.8}
+                  penumbra={1}
+                  castShadow
+                />
+              </Camera>
               <Controls enableDamping rotateSpeed={0.3} dampingFactor={0.1} />
               {Object.values(initialCubes).map((cube, index) => {
                 if (!cubes[cube.id]) return "";

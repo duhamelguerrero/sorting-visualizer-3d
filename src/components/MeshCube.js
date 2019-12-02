@@ -4,16 +4,17 @@ import { Canvas, useFrame, useThree } from "react-three-fiber";
 import * as THREE from "three";
 import { useSpring, animated } from "react-spring/three";
 
-const MeshCube = ({ cubeId, cubes, amount }) => {
+const MeshCube = ({ cubeId, cubes, amount, amountX, amountY }) => {
   const cube = cubes[cubeId];
 
   const cubeExist = cube && Object.values(cube).length;
 
   const cubePosition = cubeExist
     ? [
-        cube.position.x,
-        cube.position.y,
-        cube.position.z + (cube.order * 1.8 - (amount / 2) * 1.8)
+        cube.position.x +
+          (Math.floor(cube.order / amountY) * 1.8 - (amountX / 2) * 1.8),
+        cube.position.y - 150 / 40,
+        cube.position.z + ((cube.order % amountY) * 1.8 - (amountY / 2) * 1.8)
       ]
     : [0, 0, 0];
 
@@ -26,14 +27,16 @@ const MeshCube = ({ cubeId, cubes, amount }) => {
   return (
     <animated.mesh position={pos}>
       <animated.boxBufferGeometry attach="geometry" args={geometry} />
-      <animated.lineBasicMaterial attach="material" color={color} />
+      <animated.meshLambertMaterial attach="material" color={color} />
     </animated.mesh>
   );
 };
 
 const mapStateToProps = state => ({
   cubes: state.cubes.cubes,
-  amount: state.cubes.amount
+  amount: state.cubes.amount,
+  amountX: state.cubes.amountX,
+  amountY: state.cubes.amountY
 });
 
 export default connect(mapStateToProps)(MeshCube);

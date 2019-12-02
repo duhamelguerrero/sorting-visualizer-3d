@@ -5,6 +5,9 @@ import Menu from "@material-ui/core/Menu";
 import Button from "@material-ui/core/Button";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 
+import { useSelector, useDispatch } from "react-redux";
+import { setSelectedAlgorithm } from "../actions/sort.actions";
+
 const useStyles = makeStyles(theme => ({
   root: {
     margin: theme.spacing(0, 4),
@@ -17,20 +20,21 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const options = ["Quicksort", "Bubble"];
-
 export default function SimpleListMenu() {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const algorithms = useSelector(state => state.sort.algorithms);
+  const algorithmSelected = useSelector(state => state.sort.algorithmSelected);
+  const dispatch = useDispatch();
 
   const handleClickListItem = event => {
     setAnchorEl(event.currentTarget);
   };
 
   const handleMenuItemClick = (event, index) => {
-    setSelectedIndex(index);
     setAnchorEl(null);
+
+    dispatch(setSelectedAlgorithm(index));
   };
 
   const handleClose = () => {
@@ -48,7 +52,7 @@ export default function SimpleListMenu() {
         color="inherit"
         endIcon={<ArrowDropDownIcon />}
       >
-        {options[selectedIndex]}
+        {algorithms[algorithmSelected]}
       </Button>
 
       <Menu
@@ -58,10 +62,10 @@ export default function SimpleListMenu() {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        {options.map((option, index) => (
+        {algorithms.map((option, index) => (
           <MenuItem
             key={option}
-            selected={index === selectedIndex}
+            selected={index === algorithmSelected}
             onClick={event => handleMenuItemClick(event, index)}
           >
             {option}

@@ -1,10 +1,14 @@
-import { setAnimator } from "./sort.actions";
+import { resetAnimator, setAnimator } from "./sort.actions";
 import { getRandomCubes } from "../utils/cubes";
-import { quickSort } from "../utils/sort";
+import { quickSort, bubbleSort } from "../utils/sort";
 import { Animator } from "../utils/animator";
 
 export const setCubes = cubes => ({
   type: "CUBES_SET_CUBES",
+  payload: { cubes }
+});
+export const updateCubes = cubes => ({
+  type: "CUBES_UPDATE_CUBES",
   payload: { cubes }
 });
 
@@ -24,11 +28,12 @@ export const setAmountCubes = amount => dispatch => {
 
 export const generateCubes = amount => (dispatch, getState) => {
   const state = getState();
-  const animator = state.sort.animator;
+  dispatch(resetAnimator());
 
-  if (animator) {
-    animator.stop();
-    dispatch(setAnimator(null));
+  if (!amount) {
+    amount = state.cubes.amount;
+  } else {
+    amount = amount.amountX * amount.amountY;
   }
 
   const cubes = getRandomCubes(amount);
@@ -44,9 +49,18 @@ export const generateCubes = amount => (dispatch, getState) => {
 
 export const sortCubes = () => (dispatch, getState) => {
   const state = getState();
+  const algorithm = state.sort.algorithms[state.sort.algorithmSelected];
   const cubes = Object.values(state.cubes.cubes);
 
-  let [result, animation] = quickSort(cubes, dispatch);
+  let sortF = quickSort;
+
+  if (algorithm === "Quicksort") {
+    sortF = quickSort;
+  } else if (algorithm === "Bubble") {
+    sortF = bubbleSort;
+  }
+
+  let [result, animation] = sortF(cubes, dispatch);
 
   const animator = new Animator(animation);
   animator.play();
