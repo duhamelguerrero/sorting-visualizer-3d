@@ -27,7 +27,7 @@ export default (state = initialState, action) => {
     }
     case "CUBES_UPDATE_CUBES": {
       const { cubes } = action.payload;
-      const newCubes = state.cubes;
+      const newCubes = { ...state.cubes };
 
       Object.values(cubes).forEach(cube => {
         newCubes[cube.id] = {

@@ -1,6 +1,6 @@
 const initialState = {
-  algorithms: ["Quicksort", "Bubble"],
-  algorithmSelected: 0,
+  algorithms: ["Quicksort", "Bubble", "Merge"],
+  algorithmSelected: 2,
   animator: null
 };
 

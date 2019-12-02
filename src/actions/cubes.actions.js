@@ -1,6 +1,6 @@
 import { resetAnimator, setAnimator } from "./sort.actions";
 import { getRandomCubes } from "../utils/cubes";
-import { quickSort, bubbleSort } from "../utils/sort";
+import { quickSort, bubbleSort, mergeSort } from "../utils/sort";
 import { Animator } from "../utils/animator";
 
 export const setCubes = cubes => ({
@@ -58,6 +58,8 @@ export const sortCubes = () => (dispatch, getState) => {
     sortF = quickSort;
   } else if (algorithm === "Bubble") {
     sortF = bubbleSort;
+  } else if (algorithm === "Merge") {
+    sortF = mergeSort;
   }
 
   let [result, animation] = sortF(cubes, dispatch);
