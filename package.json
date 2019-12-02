@@ -1,17 +1,33 @@
 {
-  "name": "3d-sort",
-  "version": "0.1.0",
+  "name": "sorting-visualzier-3d",
+  "version": "0.9.0",
   "private": true,
+  "license": "MIT",
+  "homepage": "https://duhamelguerrero.github.io/sorting-visualizer-3d",
   "dependencies": {
+    "@material-ui/core": "^4.7.1",
+    "@material-ui/icons": "^4.5.1",
+    "gh-pages": "^2.1.1",
+    "gsap": "^3.0.1",
+    "lodash": "^4.17.15",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
-    "react-scripts": "3.2.0"
+    "react-redux": "^7.1.3",
+    "react-scripts": "3.2.0",
+    "react-spring": "^8.0.27",
+    "react-three-fiber": "^3.0.15",
+    "redux": "^4.0.4",
+    "redux-thunk": "^2.3.0",
+    "three": "^0.111.0",
+    "uniqid": "^5.2.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "yarn run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
